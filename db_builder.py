@@ -1,7 +1,7 @@
-# Samantha Ngo
+# Team Zhango - Samantha Ngo & Yuyang Zhang
 # SoftDev - pd 7
-# hw09 - sqlite
-# 2017-10-15
+# hw10 - average
+# 2017-10-16
 
 import sqlite3   #enable control of an sqlite database
 import csv       #facilitates CSV I/O
@@ -20,7 +20,7 @@ command = ""
 def coursesCSV():
     # Courses csv file
     tableName = "Courses"
-    columns = "code TEXT, mark INT, id INT"
+    columns = "code TEXT, mark INT, id INT, average REAL"
     command = createTable.replace("<table name>", tableName)
     command = command.replace("<values>", columns)
     print "CREATE TABLE COMMAND: ", command
@@ -29,7 +29,7 @@ def coursesCSV():
     except:
         print "Table already created."
         
-    columns = "code, mark, id"
+    columns = "code, mark, id, average"
 
     # Read through csv file
     with open('courses.csv') as csvfile:
@@ -39,7 +39,7 @@ def coursesCSV():
         for row in reader:
             command = newRow.replace("<table name>", tableName).replace("<columns>", columns)
             print "ROW DATA: ", row
-            values =  '"' + row["code"] + '"' + "," + row["mark"] + "," + row["id"]
+            values =  '"' + row["code"] + '"' + "," + row["mark"] + "," + row["id"] + "," + "-1"
             command = command.replace("<values>",values)
             print "NEW ROW COMMAND: ", command
             c.execute(command)
