@@ -21,19 +21,20 @@ command = ""
 
 # Create a table with id corresponding averages
 try:
-    c.execute("CREATE TABLE Averages(id INT, average REAL);")
+    c.execute("CREATE TABLE peeps_avg(id INT, average REAL);")
     db.commit()
-    print "Created Averages table in discobandit.db."
+    print "Created peeps_avg table in discobandit.db."
 except:
-    print "Averages table already created."
+    print "peeps_avg table already created."
 
 # Extract marks and calculate averages
-x = 1
-while x <= 10:
+def calculateAverages():
+    x = 1
+    while x <= 10:
         # For each ID, do the following:
         total = 0
         numbers = 0
-        
+            
         getAverages = "SELECT mark FROM Courses WHERE id = " + str(x) + ";"
         marks = c.execute(getAverages)# marks is just the location of the object
         for singleTuple in marks:
@@ -41,12 +42,11 @@ while x <= 10:
             num = singleTuple[0] # Extract the number from the tuple
             print num
             total += num
-            numbers += 1
+        numbers += 1
 
         # Calculate average
         average = total/numbers
         print "Average: ", average
-
         # Add the average to the table
         command = "INSERT INTO Averages(id, average) VALUES (" + str(x) + "," + str(average) + ");"
         print command
@@ -60,23 +60,50 @@ while x <= 10:
 # * A single value in a tuple looks like this: ('math',)
 # * Access tuples like a string/array by using indices: tupleName[0] or tuple[1:5]
 
+def overallGrade(id):
+    command = "SELECT average FROM peeps_avg WHERE id = " + str(id) + ";"
+    singleTuple = c.execute(command)
+    for a in singleTuple:
+        return a[0]
+
+def courseGrade(course,id):
+    command = "SELECT mark FROM Courses WHERE course = " + course + ", Courses.id = " + str(id) + ";"
+    mark = c.execute(command)
+    for m in mark:
+        try:
+            return m[0]
+        except:
+            return "This student is not taking this course."
+
+print "------------- Testing Getting Grades stuff -----------------------------"
+print "A: ", overallGrade(3)
+print "B: ", courseGrade("greatbooks",3)
+print "A: ", overallGrade(7)
+print "A: ", courseGrade("ceramics", 3)
+print "------------------------------------------------------------------------"
+
 # Display
-print "-------------------------------------------------- Final Data Compilation:"
-x = 1
-while x <= 10:
-    print "  Student ID: ", x
-    # Find name associated with id x
-    command = "SELECT name FROM Peeps WHERE id = " + str(x) + ";"
-    singleT = c.execute(command)
-    for n in singleT:
-        print "  Name: " + n[0]
-    # Find average associated with id x
-    command = "SELECT average FROM Averages WHERE id = " + str(x) + ";"
-    singleT = c.execute(command)
-    for a in singleT:
-        print "  Average: " + str(a[0])
-    print "==========================================="
-    x += 1
+def displayAverages():
+    calculateAverages()
+    print "-------------------------------------------------- Final Data Compilation:"
+    x = 1
+    while x <= 10:
+        print "  Student ID: ", x
+        # Find name associated with id x
+        command = "SELECT name FROM Peeps WHERE id = " + str(x) + ";"
+        singleT = c.execute(command)
+        for n in singleT:
+            print "  Name: " + n[0]
+        # Find average associated with id x
+        command = "SELECT average FROM Averages WHERE id = " + str(x) + ";"
+        singleT = c.execute(command)
+        for a in singleT:
+            print "  Average: " + str(a[0])
+            print "==========================================="
+        x += 1
+
+# Functions being run:
+displayAverages()
 
 # Close DATABASE
 db.close()
