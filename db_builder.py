@@ -29,7 +29,7 @@ def coursesCSV():
     except:
         print "Table already created."
         
-    columns = "code, mark, id, average"
+    columns = "code, mark, id"
 
     # Read through csv file
     with open('courses.csv') as csvfile:
@@ -39,7 +39,7 @@ def coursesCSV():
         for row in reader:
             command = newRow.replace("<table name>", tableName).replace("<columns>", columns)
             print "ROW DATA: ", row
-            values =  '"' + row["code"] + '"' + "," + row["mark"] + "," + row["id"] + "," + "-1"
+            values =  '"' + row["code"] + '"' + "," + row["mark"] + "," + row["id"]
             command = command.replace("<values>",values)
             print "NEW ROW COMMAND: ", command
             c.execute(command)
@@ -49,17 +49,19 @@ def coursesCSV():
     print "Created COURSES csv table. ======================================="
     return "Created COURSES csv table."
 
-# -------------------------------------------------COURSES TESTS--------------
-coursesCSV()
+# -------------------------------------------------COURSES TESTS------------
+# coursesCSV()
 
 # Check that global variables have not been changed by coursesCSV():
-print "CREATE TABLE VAR: " + createTable
-print "NEW ROW VAR: " + newRow
-print "TABLE NAME VAR: " + tableName
-print "VALUES VAR: " + values
-print "COMMAND VAR: " + command
-print "======================================================================="
-print 
+def diag():
+    print "CREATE TABLE VAR: " + createTable
+    print "NEW ROW VAR: " + newRow
+    print "TABLE NAME VAR: " + tableName
+    print "VALUES VAR: " + values
+    print "COMMAND VAR: " + command
+    print "============================================================"
+    print
+    return True
 
 # ----------------------------------------------------------------------------
 def peepsCSV():
@@ -97,10 +99,15 @@ def peepsCSV():
     return "Created PEEPS csv table."
 
 # Testing PEEPS TABLE ======================================================
-peepsCSV()
+# peepsCSV()
+    
+# Bundler Function
+def run():
+    db = sqlite3.connect(f) #open if f exists, otherwise create
+    c = db.cursor()    #facilitate db ops
 
-# Close DATABASE
-db.close()
-print
-print "Closed DATABASE"
+    coursesCSV()
+    diag()
+    peepsCSV()
 
+    db.close()
