@@ -42,13 +42,13 @@ def calculateAverages():
             num = singleTuple[0] # Extract the number from the tuple
             print num
             total += num
-        numbers += 1
+            numbers += 1
 
         # Calculate average
         average = total/numbers
         print "Average: ", average
         # Add the average to the table
-        command = "INSERT INTO Averages(id, average) VALUES (" + str(x) + "," + str(average) + ");"
+        command = "INSERT INTO peeps_avg(id, average) VALUES (" + str(x) + "," + str(average) + ");"
         print command
         c.execute(command)
         db.commit()
@@ -60,14 +60,18 @@ def calculateAverages():
 # * A single value in a tuple looks like this: ('math',)
 # * Access tuples like a string/array by using indices: tupleName[0] or tuple[1:5]
 
+# Fill peeps_avg
+calculateAverages()
+
 def overallGrade(id):
-    command = "SELECT average FROM peeps_avg WHERE id = " + str(id) + ";"
+    command = "SELECT average FROM peeps_avg WHERE id=" + str(id) + ";"
     singleTuple = c.execute(command)
     for a in singleTuple:
         return a[0]
 
-def courseGrade(course,id):
-    command = "SELECT mark FROM Courses WHERE course = " + course + ", Courses.id = " + str(id) + ";"
+def courseGrade(code,id):
+    command = "SELECT mark FROM Courses WHERE code = '" + code + "' AND Courses.id = " + str(id) + ";"
+    # print "COMMAND: " + command
     mark = c.execute(command)
     for m in mark:
         try:
@@ -78,13 +82,12 @@ def courseGrade(course,id):
 print "------------- Testing Getting Grades stuff -----------------------------"
 print "A: ", overallGrade(3)
 print "B: ", courseGrade("greatbooks",3)
-print "A: ", overallGrade(7)
-print "A: ", courseGrade("ceramics", 3)
+print "C: ", overallGrade(7)
+print "D: ", courseGrade("ceramics", 3)
 print "------------------------------------------------------------------------"
 
 # Display
 def displayAverages():
-    calculateAverages()
     print "-------------------------------------------------- Final Data Compilation:"
     x = 1
     while x <= 10:
@@ -95,7 +98,7 @@ def displayAverages():
         for n in singleT:
             print "  Name: " + n[0]
         # Find average associated with id x
-        command = "SELECT average FROM Averages WHERE id = " + str(x) + ";"
+        command = "SELECT average FROM peeps_avg WHERE id = " + str(x) + ";"
         singleT = c.execute(command)
         for a in singleT:
             print "  Average: " + str(a[0])
