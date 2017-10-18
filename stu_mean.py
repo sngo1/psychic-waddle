@@ -1,7 +1,7 @@
 # Team Zhango - Samantha Ngo & Yuyang Zhang
 # SoftDev - pd07
 # hw10 - Average
-# 2017-10-16
+# 2017-10-18
 
 import sqlite3   #enable control of an sqlite database
 import db_builder
@@ -105,8 +105,41 @@ def displayAverages():
             print "==========================================="
         x += 1
 
+'''       
+def update_average(id, avg):
+    command = "UPDATE peeps_avg SET average = " + str(avg) + " WHERE id = " + str(id) + ";"
+    update_avg = c.execute(command)
+    command = "SELECT average FROM peeps_avg WHERE id = " + str(id) + ";"
+    show_avg = c.execute(command)
+    for a in show_avg:
+        return a[0]
+'''
+
+
+def add_row(code, mark, stu_id):
+     command = "INSERT INTO courses VALUES(\"" + str(code) + "\" , " + str(mark) + ", " + str(stu_id) + ");"
+     c.execute(command)
+     calculateAverages()
+     x = 1
+     while x <= 10:
+        print "  Student ID: ", x
+        # Find name associated with id x
+        command = "SELECT name FROM Peeps WHERE id = " + str(x) + ";"
+        singleT = c.execute(command)
+        for n in singleT:
+            print "  Name: " + n[0]
+            # Find average associated with id x
+        command = "SELECT average FROM peeps_avg WHERE id = " + str(x) + ";"
+        singleT = c.execute(command)
+        for a in singleT:
+            print "  Average: " + str(a[0])
+        x += 1
+
+        
 # Functions being run:
 displayAverages()
+#uprint(update_average(1, 100))
+add_row("drafting", 100, 1)
 
 # Close DATABASE
 db.close()
