@@ -116,8 +116,8 @@ def update_average(id, avg):
 '''
 
 
-def add_row(code, mark, stu_id):
-     command = "INSERT INTO courses VALUES(\"" + str(code) + "\" , " + str(mark) + ", " + str(stu_id) + ");"
+def add_row(code, mark, stu_id, average):
+     command = "INSERT INTO courses VALUES(\"" + str(code) + "\" , " + str(mark) + ", " + str(stu_id) + ", " + str(average) + ");"
      c.execute(command)
      calculateAverages()
      x = 1
@@ -139,7 +139,7 @@ def add_row(code, mark, stu_id):
 # Functions being run:
 displayAverages()
 #uprint(update_average(1, 100))
-add_row("drafting", 100, 1)
+add_row("drafting", 100, 1, -1)
 
 # Close DATABASE
 db.close()
